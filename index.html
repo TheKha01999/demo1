@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            justify-content: center;
+            background: radial-gradient(ellipse at left, #F8EFBA, #FD7272);
+        }
+
+        .container {
+            /* position: relative; */
+        }
+
+        .container .contain {
+            /* border: 1px solid red; */
+            display: flex;
+            flex-wrap: wrap;
+            width: 330px;
+            gap: 10px;
+            overflow: hidden;
+        }
+
+        .container .contain button {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(ellipse at center, #F8EFBA, #82589F);
+            border: none;
+            border-radius: 10px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            cursor: pointer;
+        }
+
+        .container .contain button.active1 {
+            color: #82589F;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .container .contain button.active2 {
+            color: #FD7272;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .container .contain.active {
+            pointer-events: none;
+        }
+
+        .container .newgame.alert {
+            display: none;
+        }
+
+        .container .newgame {
+            width: 400px;
+            height: 250px;
+            background: radial-gradient(ellipse at center, #D6A2E8, #82589F);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 20px;
+        }
+
+        .container .newgame .cover {
+            text-align: center;
+        }
+
+        .container .newgame p {
+            color: #f5f6fa;
+            font-size: 30px;
+            font-weight: 700;
+            margin-top: 50px;
+        }
+
+        .container .newgame button {
+            padding: 14px 30px;
+            font-size: 20px;
+            background: #6D214F;
+            color: #f5f6fa;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            margin-top: 30px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="contain">
+            <button id="0"></button>
+            <button id="1"></button>
+            <button id="2"></button>
+            <button id="3"></button>
+            <button id="4"></button>
+            <button id="5"></button>
+            <button id="6"></button>
+            <button id="7"></button>
+            <button id="8"></button>
+        </div>
+        <div class="newgame alert">
+            <div class="cover">
+                <p id="kq"></p>
+                <button id="again">Play Again</button>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        const contain = document.querySelector('.contain')
+        const kq = document.querySelector('#kq')
+        const again = document.querySelector('#again')
+        let arr = ['', '', '', '', '', '', '', '', ''];
+        let flag = true;
+        let x = 0;
+        contain.addEventListener('click', e => {
+            if (e.target.tagName == 'BUTTON') {
+                let check;
+                if (flag == true) {
+                    x++;
+                    e.target.innerHTML = "X";
+                    flag = false;
+                    check = 1;
+                    arr[e.target.id] = 'X'
+                    e.target.disabled = true;
+                }
+                else {
+                    x++;
+                    e.target.innerHTML = "O";
+                    check = 2;
+                    flag = true;
+                    arr[e.target.id] = 'O'
+                    e.target.disabled = true;
+                }
+                e.target.classList.add('active' + check)
+            }
+            if (check_win() != 'tie') {
+                kq.innerHTML = 'Player ' + check_win() + ' win'
+                contain.classList.add('active')
+                setTimeout(() => {
+                    kq.parentElement.parentElement.classList.remove('alert')
+                }, 2000);
+            }
+            else {
+                if (x == 9) {
+                    kq.innerHTML = 'Draw'
+                    contain.classList.add('active')
+                    setTimeout(() => {
+                        kq.parentElement.parentElement.classList.remove('alert')
+                    }, 2000);
+                }
+            }
+        })
+        function check_win() {
+            if (arr[0] == arr[1] && arr[0] == arr[2] && arr[0] != '') {
+
+                return arr[0];
+
+            }
+            else if (arr[3] == arr[4] && arr[3] == arr[5] && arr[3] != '') {
+                return arr[3];
+            }
+            else if (arr[6] == arr[7] && arr[6] == arr[8] && arr[6] != '') {
+                return arr[6];
+            }
+            else if (arr[0] == arr[3] && arr[0] == arr[6] && arr[0] != '') {
+                return arr[0];
+            }
+            else if (arr[1] == arr[4] && arr[1] == arr[7] && arr[1] != '') {
+                return arr[1];
+            }
+            else if (arr[2] == arr[5] && arr[2] == arr[8] && arr[2] != '') {
+                return arr[2];
+            }
+            else if (arr[0] == arr[4] && arr[0] == arr[8] && arr[0] != '') {
+                return arr[0];
+            }
+            else if (arr[2] == arr[4] && arr[2] == arr[6] && arr[2] != '') {
+                return arr[2];
+            }
+            else {
+                return 'tie';
+            }
+        }
+        kq.nextElementSibling.addEventListener('click', e => {
+            window.location.reload();
+        })
+    </script>
+</body>
+
+</html>
